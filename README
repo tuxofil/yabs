@@ -11,7 +11,20 @@ Contents:
 1. SUMMARY
 
 YABS - is Yet Another Build Script. It provides a simple way to
-support your own RPM package repository.
+support your own OpenSUSE RPM package repository.
+
+What Yabs it is:
+- it can generate binary RPM packages and store them to consistent
+  RPM repository;
+- it can start your repo from scratch without extra configuration.
+
+What Yabs it is not:
+- it not provides any UI;
+- it can not generate packages for platforms other than host system;
+- it can not do simultaneous builds - all builds are make in
+  one process;
+- all privileges separation must be done on OS level - there is
+  no things like 'Yabs users' or 'Yabs groups'.
 
 ----------------------------------------------------------------------
 2. INSTALLATION
