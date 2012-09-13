@@ -1,0 +1,50 @@
+              YABS README FILE
+
+Contents:
+
+ 1. Summary
+ 2. Installation
+ 3. Uninstallation
+ 4. Usage
+
+----------------------------------------------------------------------
+1. SUMMARY
+
+YABS - is Yet Another Build Script. It provides a simple way to
+support your own RPM package repository.
+
+----------------------------------------------------------------------
+2. INSTALLATION
+
+Chdir to Yabs sources dir and type:
+
+$ sudo make install
+
+----------------------------------------------------------------------
+3. UNINSTALLATION
+
+Chdir to Yabs sources dir and type:
+
+$ sudo make uninstall
+
+----------------------------------------------------------------------
+4. USAGE
+
+After installation passed, Yabs will look for new source RPM packages
+in him 'incoming' directory, which locates at /var/lib/yabs/incoming.
+When Yabs finds one, it begins build process in chrooted environment.
+If build success, it will move binary packages generated to publish
+directory (/srv/www/htdocs/RPMS by default), and source RPM to
+/srv/www/htdocs/SRPMS directory. It will automatically creates
+(or updates, if such exists already) RPM repository based on packages
+generated.
+If build fails, Yabs will move failed source RPM to special directory -
+/var/lib/yabs/fail/. Any way, you can find build logs in directory
+/var/lib/yabs/logs/.
+
+If you already have Apache installed, you can point your zyppers
+to http://$HOSTNAME/RPMS to use all packages generated.
+
+----------------------------------------------------------------------
+                   Aleksey Morarash <aleksey.morarash@gmail.com>, 2012
+
