@@ -11,8 +11,7 @@
 ###
 
 ## ---------------------------------------------
-## main definitions
-ROOTFS=`pwd`/rootfs
+## functions
 
 error(){
     echo "$1" 1>&2
@@ -24,18 +23,19 @@ error(){
 [ `id --user` = "0" ] || \
     error "$0: must be run with superuser privileges"
 SRCRPM="$1"
-DSTDIR="$2"
+ROOTFS="$2"
+DSTDIR="$3"
+REPO_LIST="$4"
 [ -d "$DSTDIR" -a -w "$DSTDIR" ] || \
     error "$0: directory '$DSTDIR' is not exists or not writable"
-DSTDIR=`readlink --canonicalize-existing "$2"`
-[ -z "$SRCRPM" -o -z "$DSTDIR" ] && \
-    error "Usage: $0 <filename.src.rpm> <destination.repo.dir>"
+DSTDIR=`readlink --canonicalize-existing "$DSTDIR"`
+[ -z "$SRCRPM" -o -z "$ROOTFS" -o -z "$DSTDIR" -o -z "$REPO_LIST" ] && \
+    error "Usage: $0 <filename.src.rpm> <rootfs.dir> <destination.repo.dir> <repo.list.file>"
+[ -f "$REPO_LIST" ] || \
+    error "$0: repository list file '$REPO_LIST' is missing"
 set -e
 file "$1" > /dev/null
 SRCRPM_BASENAME=`basename "$SRCRPM"`
-# do not allow more than one simultaneous builds
-exec 3>lock
-flock --nonblock --exclusive 3 || exit 1
 mkdir --parents "$DSTDIR"/RPMS "$DSTDIR"/SRPMS
 set -x
 
@@ -54,7 +54,7 @@ mknod --mode=666 "$ROOTFS"/dev/null c 1 3
 
 ## ---------------------------------------------
 ## register package repos...
-for URL in `cat repo.list` "$DSTDIR"/RPMS; do
+for URL in `cat "$REPO_LIST"` "$DSTDIR"/RPMS; do
     zypper \
         --root "$ROOTFS" \
         --non-interactive \
@@ -83,9 +83,9 @@ zypper \
 ## initialize users and groups...
 chroot "$ROOTFS" sh -c "echo root::0:0::/root:/bin/bash > /etc/passwd"
 chroot "$ROOTFS" touch /etc/group
-chroot "$ROOTFS" groupadd --gid 0 root
-chroot "$ROOTFS" groupadd builder
-chroot "$ROOTFS" useradd --home /usr/src/packages/ --password "" --gid builder builder
+chroot "$ROOTFS" /usr/sbin/groupadd --gid 0 root
+chroot "$ROOTFS" /usr/sbin/groupadd builder
+chroot "$ROOTFS" /usr/sbin/useradd --home /usr/src/packages/ --password "" --gid builder builder
 
 ## ---------------------------------------------
 ## deploy and build package...
@@ -102,10 +102,9 @@ cd "$RUNDIR"
 mv "$ROOTFS"/usr/src/packages/SRPMS/"$SRCRPM_BASENAME" "$DSTDIR"/SRPMS/
 
 ## ---------------------------------------------
-## update package repository...
-createrepo --update --quiet "$DSTDIR"/RPMS
-
-## ---------------------------------------------
 ## clean filesystem...
 rm --recursive --force "$ROOTFS"
+
+set +x
+echo "Success"
 
