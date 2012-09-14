@@ -6,6 +6,7 @@ Contents:
  2. Installation
  3. Uninstallation
  4. Usage
+ 5. Configuration
 
 ----------------------------------------------------------------------
 1. SUMMARY
@@ -57,6 +58,11 @@ If build fails, Yabs will move failed source RPM to special directory -
 
 If you already have Apache installed, you can point your zyppers
 to http://$HOSTNAME/RPMS to use all packages generated.
+
+----------------------------------------------------------------------
+5. CONFIGURATION
+
+To tweak directory names used see /usr/bin/yabs-crontask.
 
 ----------------------------------------------------------------------
                    Aleksey Morarash <aleksey.morarash@gmail.com>, 2012
