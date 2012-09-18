@@ -48,7 +48,7 @@ DEPS=`rpm2cpio "$SRCRPM" | \
 
 ## ---------------------------------------------
 ## initialize rootfs...
-rm --recursive --force "$ROOTFS"
+rm --recursive --force "$ROOTFS"/*
 mkdir --parents "$ROOTFS"/dev
 mknod --mode=666 "$ROOTFS"/dev/null c 1 3
 
