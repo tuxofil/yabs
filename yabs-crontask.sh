@@ -3,6 +3,9 @@
 ## ---------------------------------------------
 ## definitions
 
+# HTTP proxy to use
+http_proxy=
+
 # where packages will be published
 REPO=/srv/www/htdocs/
 
@@ -40,6 +43,7 @@ do_build(){
     local SRPM="$1"
     LOGFILE="$LOGS_DIR"/`basename "$SRPM"`.log
     date > "$LOGFILE"
+    export http_proxy
     "$YABS" "$SRPM" "$ROOTFS" "$REPO" "$REPO_LIST" >> "$LOGFILE" 2>&1
     RET=$?
     date >> "$LOGFILE"
