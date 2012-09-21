@@ -76,7 +76,7 @@ zypper \
     --auto-agree-with-licenses \
     --no-recommends \
     -- \
-    pwdutils rpm gzip tar findutils \
+    pwdutils rpm gzip tar findutils gawk \
     $DEPS
 
 ## ---------------------------------------------
@@ -103,7 +103,7 @@ mv "$ROOTFS"/usr/src/packages/SRPMS/"$SRCRPM_BASENAME" "$DSTDIR"/SRPMS/
 
 ## ---------------------------------------------
 ## clean filesystem...
-rm --recursive --force "$ROOTFS"
+rm --recursive --force "$ROOTFS"/*
 
 set +x
 echo "Success"
