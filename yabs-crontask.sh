@@ -74,6 +74,7 @@ done
 if [ "$SUCCESS" = "true" ]; then
     # update repo meta info if at least one
     # package where built successfull
-    createrepo --update --quiet "$REPO"/RPMS
+    cd "$REPO"/RPMS
+    createrepo --update --quiet .
 fi
 
