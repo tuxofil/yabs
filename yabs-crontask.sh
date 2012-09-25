@@ -66,6 +66,7 @@ for SRPM in "$INCOMING_DIR"/*.src.rpm; do
     if do_build "$SRPM"; then
 	SUCCESS="true"
 	rm --force "$SRPM"
+	rm --force "$FAIL_DIR"/`basename "$SRPM"`
     else
 	mv --force "$SRPM" "$FAIL_DIR"
     fi
