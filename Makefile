@@ -15,7 +15,8 @@ uninstall:
 		/etc/cron.d/yabs \
 		/usr/bin/yabs-crontask \
 		/usr/sbin/yabs \
-		/var/lib/yabs
+		/var/lib/yabs \
+		/var/log/yabs
 
 clean:
 	find . -name '*~' -delete
