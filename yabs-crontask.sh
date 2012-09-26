@@ -33,17 +33,29 @@ ROOTFS="$RUNDIR"/rootfs
 # filename with list of used package repositories
 REPO_LIST="/etc/yabs/repo.list"
 
+CURRENT_LOG="$LOGS_DIR"/current.log
+
 ## ---------------------------------------------
 ## functions
 
 do_build(){
     local SRPM="$1"
     LOGFILE="$LOGS_DIR"/`basename "$SRPM"`.log
-    date > "$LOGFILE"
-    "$YABS" "$SRPM" "$ROOTFS" "$REPO" "$REPO_LIST" >> "$LOGFILE" 2>&1
-    RET=$?
-    date >> "$LOGFILE"
-    return $RET
+    > "$CURRENT_LOG"
+    > "$LOGFILE"
+    (
+	date
+	"$YABS" "$SRPM" "$ROOTFS" "$REPO" "$REPO_LIST"
+	RET=$?
+	[ "$RET" != "0" ] && \
+	    echo "FAILED with exit code $RET"
+	date
+	## Save task exit code in file due to
+	## "cmd | tee" construction will always return
+	## exit code, returned by tee, not by cmd.
+	echo $RET > "$RUNDIR"/lasttaskstate
+    ) 2>&1 | tee "$CURRENT_LOG" > "$LOGFILE"
+    return `cat "$RUNDIR"/lasttaskstate`
 }
 
 ## ---------------------------------------------
