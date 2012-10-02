@@ -26,11 +26,11 @@ SRCRPM="$1"
 ROOTFS="$2"
 DSTDIR="$3"
 REPO_LIST="$4"
+[ -z "$SRCRPM" -o -z "$ROOTFS" -o -z "$DSTDIR" -o -z "$REPO_LIST" ] && \
+    error "Usage: $0 <filename.src.rpm> <rootfs.dir> <destination.repo.dir> <repo.list.file>"
 [ -d "$DSTDIR" -a -w "$DSTDIR" ] || \
     error "$0: directory '$DSTDIR' is not exists or not writable"
 DSTDIR=`readlink --canonicalize-existing "$DSTDIR"`
-[ -z "$SRCRPM" -o -z "$ROOTFS" -o -z "$DSTDIR" -o -z "$REPO_LIST" ] && \
-    error "Usage: $0 <filename.src.rpm> <rootfs.dir> <destination.repo.dir> <repo.list.file>"
 [ -f "$REPO_LIST" ] || \
     error "$0: repository list file '$REPO_LIST' is missing"
 set -e
