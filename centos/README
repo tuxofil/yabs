@@ -1,0 +1,68 @@
+              YABS README FILE
+
+Contents:
+
+ 1. Summary
+ 2. Installation
+ 3. Uninstallation
+ 4. Usage
+ 5. Configuration
+
+----------------------------------------------------------------------
+1. SUMMARY
+
+YABS - is Yet Another Build Script. It provides a simple way to
+support your own Centos RPM package repository.
+
+What Yabs it is:
+- it can generate binary RPM packages and store them to consistent
+  RPM repository;
+- it can start your repo from scratch without extra configuration.
+
+What Yabs is not:
+- it not provides any UI;
+- it can not generate packages for platforms other than host system;
+- it can not do simultaneous builds - all builds are make in
+  one process;
+- all privileges separation must be done on OS level - there is
+  no things like 'Yabs users' or 'Yabs groups'.
+
+----------------------------------------------------------------------
+2. INSTALLATION
+
+Chdir to Yabs sources dir and type:
+
+$ sudo make install
+
+----------------------------------------------------------------------
+3. UNINSTALLATION
+
+Chdir to Yabs sources dir and type:
+
+$ sudo make uninstall
+
+----------------------------------------------------------------------
+4. USAGE
+
+After installation passed, Yabs will look for new source RPM packages
+in his 'incoming' directory, which locates at /var/lib/yabs/incoming.
+When Yabs finds one, it begins build process in chrooted environment.
+If build success, it will move binary packages generated to publish
+directory (/var/www/html/yabs by default). It will automatically create
+(or update, if such exists already) RPM repository based on already
+generated packages.
+If build fails, Yabs will move failed source RPM to special directory -
+/var/lib/yabs/fail/. Any way, you can find build logs in directory
+/var/lib/yabs/logs/.
+
+If you already have Apache installed, you can point your zyppers
+to http://$HOSTNAME/yabs to use all packages generated.
+
+----------------------------------------------------------------------
+5. CONFIGURATION
+
+To tweak directory names used see /usr/sbin/yabs-crontask.
+
+----------------------------------------------------------------------
+                   Aleksey Morarash <aleksey.morarash@gmail.com>, 2013
+
